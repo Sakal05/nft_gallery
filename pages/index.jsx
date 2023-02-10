@@ -6,7 +6,9 @@ const Home = () => {
   const [collectionAddress, setCollectionAddress] = useState("");
   const [NFT, setNFTs] = useState([]);
   const [fetchCollection, setFetchCollection] = useState(false);
-
+  const [viewMore, setViewMore] = useState(false);
+  const [viewMoreTitle, setViewMoreTitle] = useState("View More");
+  const [numberElementToViewMore, setNumberElementToViewMore] = useState(6);
   const onWalletAddressChange = (event) => {
     setWalletAddress(event.target.value);
   };
@@ -15,6 +17,32 @@ const Home = () => {
   };
   const onFetchCollection = (event) => {
     setFetchCollection(e.target.checked);
+  };
+
+  const onViewMore = (event) => {
+    if (viewMore === false) {
+      console.log(viewMore);
+      setNumberElementToViewMore(NFT.length);
+      console.log(numberElementToViewMore);
+      setViewMore(true);
+      setViewMoreTitle("View Less");
+    } else if (viewMore === true) {
+      console.log(viewMore);
+      setNumberElementToViewMore(6);
+      console.log(numberElementToViewMore);
+      setViewMore(false);
+      setViewMoreTitle("View More");
+    }
+
+    // if (event.target.value) {
+    //   console.log('View less Click');
+    //   setViewMore(false);
+    //   setViewMoreStatus("View More");;
+    // } else if (!event.target.value){
+    //   console.log("View More Click");
+    //   setViewMore(true);
+    //   setViewMoreStatus("View Less");
+    // }
   };
 
   const fetchNFTs = async () => {
@@ -47,9 +75,9 @@ const Home = () => {
       var requestOptions = {
         method: "GET",
       };
-      const api_key = "A8A1Oo_UTB9IN5oNHfAc2tAxdR4UVwfM";
+      const api_key = "lmutszYXhdQYY2AHL8MzNaHqsgr9vOew";
       const baseURL = `https://eth-mainnet.g.alchemy.com/v2/${api_key}/getNFTsForCollection/`;
-      const fetchURL = `${baseURL}?contractAddress=${collection}&withMetadata=${"true"}`;
+      const fetchURL = `${baseURL}?contractAddress=${collectionAddress}&withMetadata=${"true"}`;
       const nfts = await fetch(fetchURL, requestOptions).then((data) =>
         data.json()
       );
@@ -90,17 +118,24 @@ const Home = () => {
           }
           onClick={fetchNFTs}
         >
-          Let's go!{" "}
+          Let's go!
         </button>
       </div>
-      <div className='flex flex-wrap gap-12 mt-4 w-5/6 justify-center'>
-        {
-          NFT.length && NFT.map(nft => {
-            return (
-              <NFTCard nft={nft}></NFTCard>
-            )
-          })
-        }
+      <div className="flex flex-wrap gap-12 mt-4 w-5/6 justify-center">
+        {NFT.length &&
+          NFT.slice(0, numberElementToViewMore).map((nft) => {
+            console.log("Number to view: " + numberElementToViewMore);
+            return <NFTCard nft={nft}></NFTCard>;
+          })}
+      </div>
+      <div>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={onViewMore}
+          value={viewMore}
+        >
+          {viewMoreTitle}
+        </button>
       </div>
     </div>
   );
