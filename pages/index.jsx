@@ -17,9 +17,6 @@ const Home = () => {
   const onCollectionAddressChange = (event) => {
     setCollectionAddress(event.target.value);
   };
-  const onFetchCollection = (event) => {
-    setFetchCollection(e.target.checked);
-  };
 
   const onViewMore = (event) => {
     if (viewMore === false) {
@@ -36,6 +33,7 @@ const Home = () => {
   const handleCheckedFetchCollection = (event) => {
     setFetchCollection(event.target.checked);
   };
+
   const fetchNFTs = async () => {
     let nfts;
     console.log("fetching nfts");
@@ -108,7 +106,7 @@ const Home = () => {
         </label>
         <button
           className={
-            "disabled:bg-slate-500 text-white bg-blue-400 px-4 py-2 mt-3 rounded-sm w-1/5"
+            "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           }
           onClick={fetchCollection ? fetchNFTsForCollection : fetchNFTs}
         >
