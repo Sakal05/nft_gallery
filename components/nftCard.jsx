@@ -6,7 +6,7 @@ export const NFTCard = ({ nft }) => {
   const [copyValue, setCopyValue] = useState("");
   const value = nft.contract.address;
   return (
-    <div className="w-1/4 flex flex-col ">
+    <div className="w-1/4 flex flex-col h-auto ">
       <div className="rounded-md">
         <a href="">
           <img
