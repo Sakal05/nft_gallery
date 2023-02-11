@@ -27,12 +27,15 @@ const Home = () => {
       setViewMore(true);
       setViewMoreTitle("View Less");
     } else if (viewMore === true) {
-      setNumberElementToViewMore(6); 
+      setNumberElementToViewMore(6);
       setViewMore(false);
       setViewMoreTitle("View More");
     }
   };
 
+  const handleCheckedFetchCollection = (event) => {
+    setFetchCollection(event.target.checked);
+  };
   const fetchNFTs = async () => {
     let nfts;
     console.log("fetching nfts");
@@ -55,16 +58,16 @@ const Home = () => {
     if (nfts) {
       console.log("nfts:", nfts);
       setNFTs(nfts.ownedNfts);
-      setPageKey(pageKey)
+      setPageKey(pageKey);
     }
   };
 
   useEffect(() => {
-    fetchNFTs("");
+    fetchNFTs();
   }, []);
 
   const fetchNFTsForCollection = async () => {
-    if (collection.length) {
+    if (collectionAddress.length) {
       var requestOptions = {
         method: "GET",
       };
@@ -99,9 +102,7 @@ const Home = () => {
           <input
             type={"checkbox"}
             className="mr-2"
-            onChange={() => {
-              fetchCollection ? fetchNFTsForCollection() : fetchNFTs();
-            }}
+            onChange={handleCheckedFetchCollection}
           ></input>
           Fetch for collection
         </label>
@@ -109,7 +110,7 @@ const Home = () => {
           className={
             "disabled:bg-slate-500 text-white bg-blue-400 px-4 py-2 mt-3 rounded-sm w-1/5"
           }
-          onClick={fetchNFTs}
+          onClick={fetchCollection ? fetchNFTsForCollection : fetchNFTs}
         >
           Let's go!
         </button>
@@ -119,7 +120,7 @@ const Home = () => {
           NFT.slice(0, numberElementToViewMore).map((nft) => {
             return <NFTCard nft={nft}></NFTCard>;
           })}
-        { pageKey && viewMore===true && (
+        {pageKey && viewMore === true && (
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleLoadMore}
