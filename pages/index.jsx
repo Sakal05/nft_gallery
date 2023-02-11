@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NFTCard } from "../components/nftCard";
 
 const Home = () => {
@@ -9,6 +9,8 @@ const Home = () => {
   const [viewMore, setViewMore] = useState(false);
   const [viewMoreTitle, setViewMoreTitle] = useState("View More");
   const [numberElementToViewMore, setNumberElementToViewMore] = useState(6);
+  const [pageKey, setPageKey] = useState("");
+
   const onWalletAddressChange = (event) => {
     setWalletAddress(event.target.value);
   };
@@ -21,28 +23,14 @@ const Home = () => {
 
   const onViewMore = (event) => {
     if (viewMore === false) {
-      console.log(viewMore);
       setNumberElementToViewMore(NFT.length);
-      console.log(numberElementToViewMore);
       setViewMore(true);
       setViewMoreTitle("View Less");
     } else if (viewMore === true) {
-      console.log(viewMore);
-      setNumberElementToViewMore(6);
-      console.log(numberElementToViewMore);
+      setNumberElementToViewMore(6); 
       setViewMore(false);
       setViewMoreTitle("View More");
     }
-
-    // if (event.target.value) {
-    //   console.log('View less Click');
-    //   setViewMore(false);
-    //   setViewMoreStatus("View More");;
-    // } else if (!event.target.value){
-    //   console.log("View More Click");
-    //   setViewMore(true);
-    //   setViewMoreStatus("View Less");
-    // }
   };
 
   const fetchNFTs = async () => {
@@ -67,8 +55,13 @@ const Home = () => {
     if (nfts) {
       console.log("nfts:", nfts);
       setNFTs(nfts.ownedNfts);
+      setPageKey(pageKey)
     }
   };
+
+  useEffect(() => {
+    fetchNFTs("");
+  }, []);
 
   const fetchNFTsForCollection = async () => {
     if (collection.length) {
@@ -124,9 +117,16 @@ const Home = () => {
       <div className="flex flex-wrap gap-12 mt-4 w-5/6 justify-center">
         {NFT.length &&
           NFT.slice(0, numberElementToViewMore).map((nft) => {
-            console.log("Number to view: " + numberElementToViewMore);
             return <NFTCard nft={nft}></NFTCard>;
           })}
+        { pageKey && viewMore===true && (
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={handleLoadMore}
+          >
+            Load More
+          </button>
+        )}
       </div>
       <div>
         <button
